@@ -1,0 +1,43 @@
+// Proto specification of Clang's compilation database JSON format.
+//
+// Specification and documentation taken from
+// http://clang.llvm.org/docs/JSONCompilationDatabase.html
+//
+// A compilation database is a JSON file, which consist of an array of "command
+// objects", where each command object specifies one way a translation unit is
+// compiled in the project.
+
+syntax = "proto3";
+
+package clang.tooling.db;
+
+// An individual command object specifying how the translation unit is
+// compiled.
+message CompileCommand {
+  // The working directory of the compilation. All paths specified in the
+  // command or file fields must be either absolute or relative to this
+  // directory.
+  string directory = 1;
+
+  // The main translation unit source processed by this compilation step. This
+  // is used by tools as the key into the compilation database. There can be
+  // multiple command objects for the same file, for example if the same source
+  // file is compiled with different configurations.
+  string file = 2;
+
+  // The compile command executed. This must be a valid command to rerun the
+  // exact compilation step for the translation unit in the environment the
+  // build system uses. Parameters use shell quoting and shell escaping of
+  // quotes, with " and \ being the only special characters. Shell expansion is
+  // not supported.
+  string command = 3;
+
+  // The compile command executed as list of strings. Either arguments or
+  // command is required.
+  repeated string arguments = 4;
+
+  // The name of the output created by this compilation step. This field is
+  // optional. It can be used to distinguish different processing modes of the
+  // same input file.
+  string output = 5;
+}
