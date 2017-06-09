@@ -5,16 +5,6 @@
 #include "third_party/clang/compilation_database.pb.h"
 #include <iostream>
 
-std::string exec(const char* cmd) {
-  std::array<char, 128> buffer;
-  std::string output;
-  std::unique_ptr<FILE> pipe(popen(cmd, "r"));
-  while (fgets(buffer.data(), 128, pipe.get()) != NULL) {
-    output += buffer.data();
-  }
-  return output;
-}
-
 void convert(const blaze::CppCompileInfo& cpp_compile_info,
              clang::tooling::db::CompileCommand& compile_command) {
   compile_command.set_file(cpp_compile_info.source_file());
