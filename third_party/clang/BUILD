@@ -7,5 +7,6 @@ cc_proto_library(
     srcs = ["compilation_database.proto"],
     default_runtime = "@protobuf//:protobuf",
     protoc = "@protobuf//:protoc",
+    visibility = ["//visibility:public"],
 )
 
