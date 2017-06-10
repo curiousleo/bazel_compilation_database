@@ -1,5 +1,4 @@
 #include "lib/clangdb.hh"
-#include "google/protobuf/io/coded_stream.h"
 #include "google/protobuf/repeated_field.h"
 #include "third_party/bazel/extra_actions_base.pb.h"
 #include "third_party/clang/compilation_database.pb.h"
@@ -7,30 +6,30 @@
 #include <iostream>
 
 void convert(const blaze::CppCompileInfo& cpp_compile_info,
-             clang::tooling::db::CompileCommand& compile_command) {
-  compile_command.set_file(cpp_compile_info.source_file());
-  compile_command.set_output(cpp_compile_info.output_file());
+             clang::tooling::db::CompileCommand* compile_command) {
+  compile_command->set_file(cpp_compile_info.source_file());
+  compile_command->set_output(cpp_compile_info.output_file());
 
-  compile_command.add_arguments(cpp_compile_info.tool());
+  compile_command->add_arguments(cpp_compile_info.tool());
   {
-    auto compiler_option = cpp_compile_info.compiler_option();
+    const auto compiler_option = cpp_compile_info.compiler_option();
     std::for_each(
         compiler_option.cbegin(), compiler_option.cend(),
-        [&compile_command](const std::string& option) { compile_command.add_arguments(option); });
+        [&compile_command](const std::string& option) { compile_command->add_arguments(option); });
   }
-  compile_command.add_arguments("-c");
-  compile_command.add_arguments(cpp_compile_info.source_file());
-  compile_command.add_arguments("-o");
-  compile_command.add_arguments(cpp_compile_info.output_file());
+  compile_command->add_arguments("-c");
+  compile_command->add_arguments(cpp_compile_info.source_file());
+  compile_command->add_arguments("-o");
+  compile_command->add_arguments(cpp_compile_info.output_file());
 }
 
-int main(int argc, char** argv) {
+int main(const int argc, const char** argv) {
   if (argc != 3) {
     std::cerr << "expected three command line arguments, got " << argc << std::endl;
     return 1;
   }
-  std::string extra_action_info_pb(argv[1]);
-  std::string compile_command_pb(argv[2]);
+  const std::string extra_action_info_pb(argv[1]);
+  const std::string compile_command_pb(argv[2]);
 
   blaze::CppCompileInfo cpp_compile_info;
   {
@@ -44,7 +43,7 @@ int main(int argc, char** argv) {
     cpp_compile_info = extra_action_info.GetExtension(blaze::CppCompileInfo::cpp_compile_info);
   }
   clang::tooling::db::CompileCommand compile_command;
-  convert(cpp_compile_info, compile_command);
+  convert(cpp_compile_info, &compile_command);
   {
     std::fstream f(compile_command_pb, f.out | f.binary);
     if (!f.is_open()) {

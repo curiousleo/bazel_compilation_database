@@ -2,16 +2,12 @@
 
 # https://stackoverflow.com/a/21188136
 abspath() {
-  # $1 : relative filename
-  echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+    echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 }
 
-BAZEL_TARGET=$1
-INDEX_ROOT="$(bazel info execution_root)/bazel-out/local-fastbuild/extra_actions/tools/index_action"
-DB_OUT=$(abspath "compile_commands.json")
+EXEC_ROOT=$(bazel info execution_root)
+INDEX_ROOT="$EXEC_ROOT/bazel-out/local-fastbuild/extra_actions/tools/index_action"
 
-# bazel build --experimental_action_listener='//tools:index' "$BAZEL_TARGET"
-# bazel run //main:collect "$INDEX_ROOT" "$DB_OUT"
+find "$INDEX_ROOT" -name '*_compile_command.pb' | \
+    xargs bazel run //main:collect -- "$EXEC_ROOT" "$(abspath compile_commands.json)"
 
-echo "bazel build --experimental_action_listener='//tools:index' \"$BAZEL_TARGET\""
-echo "bazel run //main:collect \"$INDEX_ROOT\" \"$DB_OUT\""
