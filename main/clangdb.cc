@@ -3,6 +3,7 @@
 #include "google/protobuf/repeated_field.h"
 #include "third_party/bazel/extra_actions_base.pb.h"
 #include "third_party/clang/compilation_database.pb.h"
+#include <fstream>
 #include <iostream>
 
 void convert(const blaze::CppCompileInfo& cpp_compile_info,
@@ -28,19 +29,29 @@ int main(int argc, char** argv) {
     std::cerr << "expected three command line arguments, got " << argc << std::endl;
     return 1;
   }
+  std::string extra_action_info_pb(argv[1]);
+  std::string compile_command_pb(argv[2]);
 
   blaze::CppCompileInfo cpp_compile_info;
   {
     blaze::ExtraActionInfo extra_action_info;
-    std::unique_ptr<FILE> extra_action_info_file(std::fopen(argv[1], "rb"));
-    extra_action_info.ParseFromFileDescriptor(fileno(extra_action_info_file.get()));
+    std::fstream f(extra_action_info_pb, f.in | f.binary);
+    if (!f.is_open()) {
+      std::cerr << "failed to open " << extra_action_info_pb << std::endl;
+      return 1;
+    }
+    extra_action_info.ParseFromIstream(&f);
     cpp_compile_info = extra_action_info.GetExtension(blaze::CppCompileInfo::cpp_compile_info);
   }
   clang::tooling::db::CompileCommand compile_command;
   convert(cpp_compile_info, compile_command);
   {
-    std::unique_ptr<FILE> compile_command_file(std::fopen(argv[2], "wb"));
-    compile_command.SerializeToFileDescriptor(fileno(compile_command_file.get()));
+    std::fstream f(compile_command_pb, f.out | f.binary);
+    if (!f.is_open()) {
+      std::cerr << "failed to open " << compile_command_pb << std::endl;
+      return 1;
+    }
+    compile_command.SerializeToOstream(&f);
   }
 
   return 0;
