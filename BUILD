@@ -1,7 +1,7 @@
 action_listener(
     name = "capture",
     mnemonics = ["CppCompile"],
-    extra_actions = [":capture_cc_command_action"],
+    extra_actions = [":capture_action"],
     visibility = ["//visibility:public"],
 )
 
