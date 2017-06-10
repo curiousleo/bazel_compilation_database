@@ -16,7 +16,7 @@ extra_action(
 
 cc_binary(
     name = "capture_binary",
-    srcs = ["main/capture.cc"],
+    srcs = ["src/capture.cc"],
     deps = [
 	"@protobuf//:protobuf",
 	"//third_party/bazel:extra_actions_base_cc_proto",
@@ -26,7 +26,7 @@ cc_binary(
 
 cc_binary(
     name = "collect",
-    srcs = ["main/collect.cc"],
+    srcs = ["src/collect.cc"],
     deps = [
 	"@protobuf//:protobuf",
 	"//third_party/clang:compilation_database_cc_proto",

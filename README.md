@@ -34,7 +34,7 @@ Enable the `extra_action` that captures the compilation commands in your project
 ```
 build --experimental_action_listener=@bazel_compilation_database//:capture
 # Optional: restrict usage of the listener by regex
-# build --experimental_extra_action_filter=^//main(/|:)
+# build --experimental_extra_action_filter=^//src(/|:)
 ```
 
 This handy script will then collect the compilation commands into `compile_commands.json`:
