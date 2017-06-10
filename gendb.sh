@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-find "$(bazel info output_path)/local-fastbuild/extra_actions/tools/index_action" -name '*_compile_command.pb' | \
-	xargs bazel run //main:collect -- "$(bazel info execution_root)" "$(bazel info workspace)/compile_commands.json"
+ACTION_DIRECTORY="$(bazel info output_path)/local-fastbuild/extra_actions/capture_cc_command_action"
+EXEC_DIRECTORY="$(bazel info execution_root)"
+COMMAND_DB_FILE="$(bazel info workspace)/compile_commands.json"
 
+bazel run //:collect -- "$ACTION_DIRECTORY" "$EXEC_DIRECTORY" "$COMMAND_DB_FILE"

@@ -1,4 +1,3 @@
-#include "lib/clangdb.hh"
 #include "google/protobuf/repeated_field.h"
 #include "third_party/bazel/extra_actions_base.pb.h"
 #include "third_party/clang/compilation_database.pb.h"
