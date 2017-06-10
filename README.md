@@ -23,8 +23,9 @@ Import the repository into your `WORKSPACE`:
 ```
 http_archive(
     name = "bazel_compilation_database",
-    url = "",
-    sha256sum = "",
+    url = "https://github.com/curiousleo/bazel_compilation_database/archive/9ccdbe1252050a7ddbd146dd425f4fb48251f378.zip",
+    sha256 = "f1e0d4ed4590af2ff84f258acdcddae7aa1047e5531ec704fc271b0dc2b45898",
+    strip_prefix = "bazel_compilation_database-9ccdbe1252050a7ddbd146dd425f4fb48251f378",
 )
 ```
 
