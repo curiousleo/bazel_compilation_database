@@ -41,7 +41,7 @@ This handy script will then collect the compilation commands into `compile_comma
 ```bash
 #!/usr/bin/env bash
 
-ACTION_DIRECTORY="$(bazel info output_path)/local-fastbuild/extra_actions/capture_cc_command_action"
+ACTION_DIRECTORY="$(bazel info output_path)/local-fastbuild/extra_actions/external/bazel_compilation_database/capture_action"
 EXEC_DIRECTORY="$(bazel info execution_root)"
 COMMAND_DB_FILE="$(bazel info workspace)/compile_commands.json"
 
@@ -53,7 +53,7 @@ it after `bazel build` will update the `compile_commands.json` file in the root 
 like so:
 
 ```
-bazel build //main/... && ./update_compilation_database.sh
+bazel build <your target> && ./update_compilation_database.sh
 ```
 
 You may need to `bazel clean` your project before this works.
