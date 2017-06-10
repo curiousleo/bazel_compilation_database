@@ -1,6 +1,6 @@
 cc_binary(
-    name = "clangdb",
-    srcs = ["clangdb.cc"],
+    name = "capture",
+    srcs = ["capture.cc"],
     deps = [
         "//lib:clangdb",
 	"@protobuf//:protobuf",
