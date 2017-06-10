@@ -9,3 +9,14 @@ cc_binary(
     ],
     visibility = ["//visibility:public"],
 )
+
+cc_binary(
+    name = "collect",
+    srcs = ["collect.cc"],
+    deps = [
+        "//lib:clangdb",
+	"@protobuf//:protobuf",
+	"//third_party/clang:compilation_database_cc_proto",
+    ],
+    visibility = ["//visibility:public"],
+)
